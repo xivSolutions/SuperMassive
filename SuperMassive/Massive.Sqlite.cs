@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Massive.SQLite
+namespace SuperMassive.SQLite
 {
     public static class ObjectExtensions
     {

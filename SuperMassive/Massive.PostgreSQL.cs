@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
-namespace Massive.PostgreSQL
+namespace SuperMassive.PostgreSQL
 {
     public static class ObjectExtensions
     {

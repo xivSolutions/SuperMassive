@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMassive", "SuperMassive\SuperMassive.csproj", "{721B0951-9C15-406C-8F93-93F02CAF3FD6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataServiceExamples", "DataServiceExamples\DataServiceExamples.csproj", "{1E9E5192-1A54-4BEB-9EBC-FF581AF5DF5F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{721B0951-9C15-406C-8F93-93F02CAF3FD6} = {721B0951-9C15-406C-8F93-93F02CAF3FD6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
-namespace Massive {
+namespace SuperMassive {
     public static class ObjectExtensions {
         public static void CloneFromObject(this object o, object record) {
             var props = o.GetType().GetProperties();
