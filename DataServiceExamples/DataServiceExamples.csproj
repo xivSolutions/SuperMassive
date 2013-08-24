@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Spatial, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,76 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdventureWorks\Address.cs" />
-    <Compile Include="AdventureWorks\AddressType.cs" />
-    <Compile Include="AdventureWorks\BillOfMaterial.cs" />
-    <Compile Include="AdventureWorks\BusinessEntity.cs" />
-    <Compile Include="AdventureWorks\BusinessEntityAddress.cs" />
-    <Compile Include="AdventureWorks\BusinessEntityContact.cs" />
-    <Compile Include="AdventureWorks\ContactType.cs" />
-    <Compile Include="AdventureWorks\CountryRegion.cs" />
-    <Compile Include="AdventureWorks\CountryRegionCurrency.cs" />
-    <Compile Include="AdventureWorks\CreditCard.cs" />
-    <Compile Include="AdventureWorks\Culture.cs" />
-    <Compile Include="AdventureWorks\Currency.cs" />
-    <Compile Include="AdventureWorks\CurrencyRate.cs" />
-    <Compile Include="AdventureWorks\Customer.cs" />
-    <Compile Include="AdventureWorks\DatabaseLog.cs" />
-    <Compile Include="AdventureWorks\Department.cs" />
-    <Compile Include="AdventureWorks\EmailAddress.cs" />
-    <Compile Include="AdventureWorks\Employee.cs" />
-    <Compile Include="AdventureWorks\EmployeeDepartmentHistory.cs" />
-    <Compile Include="AdventureWorks\EmployeePayHistory.cs" />
-    <Compile Include="AdventureWorks\ErrorLog.cs" />
-    <Compile Include="AdventureWorks\Illustration.cs" />
-    <Compile Include="AdventureWorks\JobCandidate.cs" />
-    <Compile Include="AdventureWorks\Location.cs" />
-    <Compile Include="AdventureWorks\Password.cs" />
-    <Compile Include="AdventureWorks\Person.cs" />
-    <Compile Include="AdventureWorks\PersonCreditCard.cs" />
-    <Compile Include="AdventureWorks\PersonPhone.cs" />
-    <Compile Include="AdventureWorks\PhoneNumberType.cs" />
-    <Compile Include="AdventureWorks\Product.cs" />
-    <Compile Include="AdventureWorks\ProductCategory.cs" />
-    <Compile Include="AdventureWorks\ProductCostHistory.cs" />
-    <Compile Include="AdventureWorks\ProductDescription.cs" />
-    <Compile Include="AdventureWorks\ProductDocument.cs" />
-    <Compile Include="AdventureWorks\ProductInventory.cs" />
-    <Compile Include="AdventureWorks\ProductListPriceHistory.cs" />
-    <Compile Include="AdventureWorks\ProductModel.cs" />
-    <Compile Include="AdventureWorks\ProductModelIllustration.cs" />
-    <Compile Include="AdventureWorks\ProductModelProductDescriptionCulture.cs" />
-    <Compile Include="AdventureWorks\ProductPhoto.cs" />
-    <Compile Include="AdventureWorks\ProductProductPhoto.cs" />
-    <Compile Include="AdventureWorks\ProductReview.cs" />
-    <Compile Include="AdventureWorks\ProductSubcategory.cs" />
-    <Compile Include="AdventureWorks\ProductVendor.cs" />
-    <Compile Include="AdventureWorks\PurchaseOrderDetail.cs" />
-    <Compile Include="AdventureWorks\PurchaseOrderHeader.cs" />
-    <Compile Include="AdventureWorks\SalesOrderDetail.cs" />
-    <Compile Include="AdventureWorks\SalesOrderHeader.cs" />
-    <Compile Include="AdventureWorks\SalesOrderHeaderSalesReason.cs" />
-    <Compile Include="AdventureWorks\SalesPerson.cs" />
-    <Compile Include="AdventureWorks\SalesPersonQuotaHistory.cs" />
-    <Compile Include="AdventureWorks\SalesReason.cs" />
-    <Compile Include="AdventureWorks\SalesTaxRate.cs" />
-    <Compile Include="AdventureWorks\SalesTerritory.cs" />
-    <Compile Include="AdventureWorks\SalesTerritoryHistory.cs" />
-    <Compile Include="AdventureWorks\ScrapReason.cs" />
-    <Compile Include="AdventureWorks\Shift.cs" />
-    <Compile Include="AdventureWorks\ShipMethod.cs" />
-    <Compile Include="AdventureWorks\ShoppingCartItem.cs" />
-    <Compile Include="AdventureWorks\SpecialOffer.cs" />
-    <Compile Include="AdventureWorks\SpecialOfferProduct.cs" />
-    <Compile Include="AdventureWorks\StateProvince.cs" />
-    <Compile Include="AdventureWorks\Store.cs" />
-    <Compile Include="AdventureWorks\TransactionHistory.cs" />
-    <Compile Include="AdventureWorks\TransactionHistoryArchive.cs" />
-    <Compile Include="AdventureWorks\UnitMeasure.cs" />
-    <Compile Include="AdventureWorks\Vendor.cs" />
-    <Compile Include="AdventureWorks\WorkOrder.cs" />
-    <Compile Include="AdventureWorks\WorkOrderRouting.cs" />
-    <Compile Include="AdventureWorksDb.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +53,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
