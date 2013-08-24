@@ -1,4 +1,4 @@
-Massive is Still a Better-Then-Chocolate Database Lover, But . . .
+Massive is Still a Better-Than-Chocolate Database Lover, But . . .
 ===============================================================================
 
 
