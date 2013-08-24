@@ -1,14 +1,12 @@
-Massive is a Single File Database Lover. It's Better Than Chocolate. No Really.
+Massive is Still a Better-Then-Chocolate Database Lover, But . . .
 ===============================================================================
 
 
-I'm sharing this with the world because we need another way to access data - don't you think? Truthfully - I wanted to see if I could flex the C# 4 stuff and
-run up data access with a single file. I used to have this down to 350 lines, but you also needed to reference WebMatrix.Data. Now you don't - this is ready to roll 
-and weighs in at a lovely 524 lines of code. Most of which is comments.
+I am using this space to experiment with some breaking changes Rob Conery introduced in an alpha branch on the original project. For the moment, I am leaving the rest of Mr. Conery's original read-me in place, though some of the functionality described may be broken while I mess with this. More will be revealed. 
 
 How To Install It?
 ------------------
-Drop the code file into your app and change it as you wish. 
+Drop the Massive.cs (or one of the provider-specific) code file(s) into your app and change it as you wish. 
 
 How Do You Use It?
 ------------------
