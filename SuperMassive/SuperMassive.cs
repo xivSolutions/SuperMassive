@@ -13,7 +13,9 @@ using System.Text.RegularExpressions;
 
 namespace SuperMassive {
     public static class ObjectExtensions {
+
         public static void CloneFromObject(this object o, object record) {
+            // TODO: THIS IS NOT USED SO FAR, AS OF 8/24/2013?
             var props = o.GetType().GetProperties();
             var dictionary = record.ToDictionary();
             foreach (var prop in props) {
@@ -68,6 +70,7 @@ namespace SuperMassive {
         /// Turns an IDataReader to a Dynamic list of things
         /// </summary>
         public static List<dynamic> ToExpandoList(this IDataReader rdr) {
+            // TODO: THIS IS NOT USED SO FAR AS OF 8/24/2013:
             var result = new List<dynamic>();
             while (rdr.Read()) {
                 result.Add(rdr.RecordToExpando());
@@ -86,6 +89,7 @@ namespace SuperMassive {
 
 
         public static List<T> ToList<T>(this IDataReader rdr) where T : new() {
+            // TODO: THIS IS NOT USED SO FAR AS OF 8/24/2013:
             var result = new List<T>();
             while (rdr.Read()) {
                 result.Add(rdr.ToSingle<T>());
@@ -162,6 +166,35 @@ namespace SuperMassive {
     public class DynamicModel : DynamicObject {
         DbProviderFactory _factory;
         string ConnectionString;
+
+        public virtual string TableName { get; set; }
+        public virtual string PrimaryKeyField { get; set; }
+        public virtual bool PkIsIdentityColumn { get; set; }        
+        public string DescriptorField { get; protected set; }
+
+
+        /// <summary>
+        /// Conventionally introspects the object passed in for a field that 
+        /// looks like a PK. If you've named your PrimaryKeyField, this becomes easy
+        /// </summary>
+        public virtual bool HasPrimaryKey(object o)
+        {
+            return o.ToDictionary().ContainsKey(PrimaryKeyField);
+        }
+
+
+        /// <summary>
+        /// If the object passed in has a property with the same name as your PrimaryKeyField
+        /// it is returned here.
+        /// </summary>
+        public virtual object GetPrimaryKey(object o)
+        {
+            object result = null;
+            o.ToDictionary().TryGetValue(PrimaryKeyField, out result);
+            return result;
+        }
+
+
         public static DynamicModel Open(string connectionStringName) {
             dynamic dm = new DynamicModel(connectionStringName);
             return dm;
@@ -189,6 +222,7 @@ namespace SuperMassive {
         /// Gets a default value for the column
         /// </summary>
         public dynamic DefaultValue(dynamic column) {
+            // TODO: THIS IS NOT USED YET AS OF 8/24/2013
             dynamic result = null;
             string def = column.COLUMN_DEFAULT;
             if (String.IsNullOrEmpty(def)) {
@@ -204,15 +238,14 @@ namespace SuperMassive {
         }
 
 
-        public string DescriptorField { get; protected set; }
-
-
         /// <summary>
         /// List out all the schema bits for use with ... whatever
         /// </summary>
         IEnumerable<dynamic> _schema;
         public IEnumerable<dynamic> Schema {
-            get {
+            // TODO: THIS IS NOT USED YET AS OF 8/24/2013
+            get
+            {
                 if (_schema == null) {
                     _schema = Query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @0", TableName);
                 }
@@ -277,17 +310,7 @@ namespace SuperMassive {
         }
 
 
-        /// <summary>
-        /// Creates a DBCommand that you can use for loving your database.
-        /// </summary>
-        DbCommand CreateCommand(string sql, DbConnection conn, params object[] args) {
-            var result = _factory.CreateCommand();
-            result.Connection = conn;
-            result.CommandText = sql;
-            if (args.Length > 0)
-                result.AddParams(args);
-            return result;
-        }
+
 
 
         /// <summary>
@@ -300,23 +323,6 @@ namespace SuperMassive {
             return result;
         }
 
-
-        /// <summary>
-        /// Builds a set of Insert and Update commands based on the passed-on objects.
-        /// These objects can be POCOs, Anonymous, NameValueCollections, or Expandos. Objects
-        /// With a PK property (whatever PrimaryKeyField is set to) will be created at UPDATEs
-        /// </summary>
-        public virtual List<DbCommand> BuildCommands(params object[] things) {
-            var commands = new List<DbCommand>();
-            foreach (var item in things) {
-                if (HasPrimaryKey(item)) {
-                    commands.Add(CreateUpdateCommand(item.ToExpando(), GetPrimaryKey(item)));
-                } else {
-                    commands.Add(CreateInsertCommand(item.ToExpando()));
-                }
-            }
-            return commands;
-        }
 
 
         public virtual int Execute(DbCommand command) {
@@ -346,33 +352,6 @@ namespace SuperMassive {
             }
             return result;
         }
-
-
-        public virtual string PrimaryKeyField { get; set; }
-
-
-        /// <summary>
-        /// Conventionally introspects the object passed in for a field that 
-        /// looks like a PK. If you've named your PrimaryKeyField, this becomes easy
-        /// </summary>
-        public virtual bool HasPrimaryKey(object o) {
-            return o.ToDictionary().ContainsKey(PrimaryKeyField);
-        }
-
-
-        /// <summary>
-        /// If the object passed in has a property with the same name as your PrimaryKeyField
-        /// it is returned here.
-        /// </summary>
-        public virtual object GetPrimaryKey(object o) {
-            object result = null;
-            o.ToDictionary().TryGetValue(PrimaryKeyField, out result);
-            return result;
-        }
-
-
-        public virtual bool PkIsIdentityColumn { get; set; }
-        public virtual string TableName { get; set; }
 
 
         /// <summary>
@@ -488,6 +467,43 @@ namespace SuperMassive {
         }
 
 
+        /// <summary>
+        /// Builds a set of Insert and Update commands based on the passed-on objects.
+        /// These objects can be POCOs, Anonymous, NameValueCollections, or Expandos. Objects
+        /// With a PK property (whatever PrimaryKeyField is set to) will be created at UPDATEs
+        /// </summary>
+        public virtual List<DbCommand> BuildCommands(params object[] things)
+        {
+            var commands = new List<DbCommand>();
+            foreach (var item in things)
+            {
+                if (HasPrimaryKey(item))
+                {
+                    commands.Add(CreateUpdateCommand(item.ToExpando(), GetPrimaryKey(item)));
+                }
+                else
+                {
+                    commands.Add(CreateInsertCommand(item.ToExpando()));
+                }
+            }
+            return commands;
+        }
+
+
+        /// <summary>
+        /// Creates a DBCommand that you can use for loving your database.
+        /// </summary>
+        DbCommand CreateCommand(string sql, DbConnection conn, params object[] args)
+        {
+            var result = _factory.CreateCommand();
+            result.Connection = conn;
+            result.CommandText = sql;
+            if (args.Length > 0)
+                result.AddParams(args);
+            return result;
+        }
+
+
         public virtual DbCommand CreateInsertCommand(dynamic expando) {
             DbCommand result = null;
             var settings = (IDictionary<string, object>)expando;
@@ -569,11 +585,14 @@ namespace SuperMassive {
 
         //Temporary holder for error messages
         public IList<string> Errors = new List<string>();
+
+
         /// <summary>
         /// Adds a record to the database. You can pass in an Anonymous object, an ExpandoObject,
         /// A regular old POCO, or a NameValueColletion from a Request.Form or Request.QueryString
         /// </summary>
         public virtual dynamic Insert(object o) {
+            // THIS SHOULD HAVE AN OVERRIDE WHICH RETURNS <T>
             var ex = o.ToExpando();
             if (!IsValid(ex)) {
                 throw new InvalidOperationException("Can't insert: " + String.Join("; ", Errors.ToArray()));
@@ -638,6 +657,8 @@ namespace SuperMassive {
         public int DeleteWhere(string where = "", params object[] args) {
             return Execute(CreateDeleteCommand(where: where, args: args));
         }
+
+
         public void DefaultTo(string key, object value, dynamic item) {
             if (!ItemContainsKey(key, item)) {
                 var dc = (IDictionary<string, object>)item;
