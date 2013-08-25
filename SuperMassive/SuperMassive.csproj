@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Massive.cs" />
+    <Compile Include="SuperMassive.cs" />
     <Compile Include="Massive.Oracle.cs" />
     <Compile Include="Massive.PostgreSQL.cs" />
     <Compile Include="Massive.Sqlite.cs" />

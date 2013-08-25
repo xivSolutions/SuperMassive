@@ -25,6 +25,8 @@ namespace SuperMassive {
                 }
             }
         }
+
+
         /// <summary>
         /// Extension method for adding in a bunch of parameters
         /// </summary>
@@ -33,6 +35,8 @@ namespace SuperMassive {
                 AddParam(cmd, item);
             }
         }
+
+
         /// <summary>
         /// Extension for adding single parameter
         /// </summary>
@@ -58,6 +62,8 @@ namespace SuperMassive {
             }
             cmd.Parameters.Add(p);
         }
+
+
         /// <summary>
         /// Turns an IDataReader to a Dynamic list of things
         /// </summary>
@@ -68,6 +74,8 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         public static dynamic RecordToExpando(this IDataReader rdr) {
             dynamic e = new ExpandoObject();
             var d = e as IDictionary<string, object>;
@@ -75,6 +83,8 @@ namespace SuperMassive {
                 d.Add(rdr.GetName(i), DBNull.Value.Equals(rdr[i]) ? null : rdr[i]);
             return e;
         }
+
+
         public static List<T> ToList<T>(this IDataReader rdr) where T : new() {
             var result = new List<T>();
             while (rdr.Read()) {
@@ -82,6 +92,8 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         public static T ToSingle<T>(this IDataReader rdr) where T : new() {
             var item = new T();
             var props = item.GetType().GetProperties();
@@ -99,6 +111,8 @@ namespace SuperMassive {
             }
             return item;
         }
+
+
         /// <summary>
         /// Turns the object into an ExpandoObject
         /// </summary>
@@ -119,6 +133,8 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         /// <summary>
         /// Turns the object into a Dictionary
         /// </summary>
@@ -126,6 +142,7 @@ namespace SuperMassive {
             return (IDictionary<string, object>)thingy.ToExpando();
         }
     }
+
 
 
     /// <summary>
@@ -136,6 +153,7 @@ namespace SuperMassive {
             return new DynamicModel(ConfigurationManager.ConnectionStrings[connectionName].ConnectionString, tableName, primaryKeyField);
         }
     }
+
 
     
     /// <summary>
@@ -148,6 +166,8 @@ namespace SuperMassive {
             dynamic dm = new DynamicModel(connectionStringName);
             return dm;
         }
+
+
         public DynamicModel(string connectionStringName, string tableName = "",
             string primaryKeyField = "", string descriptorField = "", bool pkIsIdentityColumn = true)
         {
@@ -163,6 +183,8 @@ namespace SuperMassive {
             _factory = DbProviderFactories.GetFactory(_providerName);
             ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
         }
+
+
         /// <summary>
         /// Gets a default value for the column
         /// </summary>
@@ -180,7 +202,11 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         public string DescriptorField { get; protected set; }
+
+
         /// <summary>
         /// List out all the schema bits for use with ... whatever
         /// </summary>
@@ -193,6 +219,8 @@ namespace SuperMassive {
                 return _schema;
             }
         }
+
+
         /// <summary>
         /// Enumerates the reader yielding the result - thanks to Jeroen Haegebaert
         /// </summary>
@@ -204,6 +232,8 @@ namespace SuperMassive {
                 }
             }
         }
+
+
         public virtual IEnumerable<dynamic> Query(string sql, DbConnection connection, params object[] args) {
             using (var rdr = CreateCommand(sql, connection, args).ExecuteReader()) {
                 while (rdr.Read()) {
@@ -211,6 +241,8 @@ namespace SuperMassive {
                 }
             }
         }
+
+
         /// <summary>
         /// Enumerates the reader yielding the result - thanks to Jeroen Haegebaert
         /// </summary>
@@ -222,6 +254,8 @@ namespace SuperMassive {
                 }
             }
         }
+
+
         public virtual IEnumerable<T> Query<T>(string sql, DbConnection connection, params object[] args) where T : new() {
             using (var rdr = CreateCommand(sql, connection, args).ExecuteReader()) {
                 while (rdr.Read()) {
@@ -229,6 +263,8 @@ namespace SuperMassive {
                 }
             }
         }
+
+
         /// <summary>
         /// Returns a single result
         /// </summary>
@@ -239,6 +275,8 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         /// <summary>
         /// Creates a DBCommand that you can use for loving your database.
         /// </summary>
@@ -250,6 +288,8 @@ namespace SuperMassive {
                 result.AddParams(args);
             return result;
         }
+
+
         /// <summary>
         /// Returns and OpenConnection
         /// </summary>
@@ -259,6 +299,8 @@ namespace SuperMassive {
             result.Open();
             return result;
         }
+
+
         /// <summary>
         /// Builds a set of Insert and Update commands based on the passed-on objects.
         /// These objects can be POCOs, Anonymous, NameValueCollections, or Expandos. Objects
@@ -281,9 +323,12 @@ namespace SuperMassive {
             return Execute(new DbCommand[] { command });
         }
 
+
         public virtual int Execute(string sql, params object[] args) {
             return Execute(CreateCommand(sql, null, args));
         }
+
+
         /// <summary>
         /// Executes a series of DBCommands in a transaction
         /// </summary>
@@ -301,7 +346,11 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         public virtual string PrimaryKeyField { get; set; }
+
+
         /// <summary>
         /// Conventionally introspects the object passed in for a field that 
         /// looks like a PK. If you've named your PrimaryKeyField, this becomes easy
@@ -309,6 +358,8 @@ namespace SuperMassive {
         public virtual bool HasPrimaryKey(object o) {
             return o.ToDictionary().ContainsKey(PrimaryKeyField);
         }
+
+
         /// <summary>
         /// If the object passed in has a property with the same name as your PrimaryKeyField
         /// it is returned here.
@@ -318,8 +369,12 @@ namespace SuperMassive {
             o.ToDictionary().TryGetValue(PrimaryKeyField, out result);
             return result;
         }
+
+
         public virtual bool PkIsIdentityColumn { get; set; }
         public virtual string TableName { get; set; }
+
+
         /// <summary>
         /// Returns all records complying with the passed-in WHERE clause and arguments, 
         /// ordered as specified, limited (TOP) by limit.
@@ -328,10 +383,14 @@ namespace SuperMassive {
             string sql = BuildSelect(where, orderBy, limit);
             return Query(string.Format(sql, columns, TableName), args);
         }
+
+
         public virtual IEnumerable<T> All<T>(string where = "", string orderBy = "", int limit = 0, string columns = "*", params object[] args) where T : new() {
             string sql = BuildSelect(where, orderBy, limit);
             return Query<T>(string.Format(sql, columns, TableName), args);
         }
+
+
         private static string BuildSelect(string where, string orderBy, int limit) {
             string sql = limit > 0 ? "SELECT TOP " + limit + " {0} FROM {1} " : "SELECT {0} FROM {1} ";
             if (!string.IsNullOrEmpty(where)) {
@@ -342,6 +401,8 @@ namespace SuperMassive {
             }
             return sql;
         }
+
+
         /// <summary>
         /// Returns a single row from the database
         /// </summary>
@@ -350,6 +411,8 @@ namespace SuperMassive {
         var sql = string.Format("SELECT TOP 2 * FROM {0} WHERE {1}", TableName, where);
         return Query<T>(sql, args).FirstOrDefault();
         }
+
+
         /// <summary>
         /// Returns a single row from the database
         /// </summary>
@@ -358,6 +421,8 @@ namespace SuperMassive {
         var sql = string.Format("SELECT TOP 2 * FROM {0} WHERE {1} = @0", TableName, PrimaryKeyField);
         return Query<T>(sql, key).FirstOrDefault();
         }
+
+
         /// <summary>
         /// Returns a single row from the database
         /// </summary>
@@ -365,6 +430,8 @@ namespace SuperMassive {
             var sql = string.Format("SELECT TOP 2 * FROM {0} WHERE {1}", TableName, where);
             return Query(sql, args).FirstOrDefault();
         }
+
+
         /// <summary>
         /// Returns a single row from the database
         /// </summary>
@@ -372,6 +439,8 @@ namespace SuperMassive {
         var sql = string.Format("SELECT TOP 2 * FROM {0} WHERE {1} = @0", TableName, PrimaryKeyField);
             return Query(sql, key).FirstOrDefault();
         }
+
+
         /// <summary>
         /// This will return a string/object dictionary for dropdowns etc
         /// </summary>
@@ -386,17 +455,23 @@ namespace SuperMassive {
             var results = Query(sql).ToList().Cast<IDictionary<string, object>>();
             return results.ToDictionary(key => key[PrimaryKeyField].ToString(), value => value[DescriptorField]);
         }
+
+
         /// <summary>
         /// This will return an Expando as a Dictionary
         /// </summary>
         public virtual IDictionary<string, object> ItemAsDictionary(ExpandoObject item) {
             return (IDictionary<string, object>)item;
         }
+
+
         //Checks to see if a key is present based on the passed-in value
         public virtual bool ItemContainsKey(string key, ExpandoObject item) {
             var dc = ItemAsDictionary(item);
             return dc.ContainsKey(key);
         }
+
+
         /// <summary>
         /// Executes a set of objects as Insert or Update commands based on their property settings, within a transaction.
         /// These objects can be POCOs, Anonymous, NameValueCollections, or Expandos. Objects
@@ -411,6 +486,8 @@ namespace SuperMassive {
             var commands = BuildCommands(things);
             return Execute(commands);
         }
+
+
         public virtual DbCommand CreateInsertCommand(dynamic expando) {
             DbCommand result = null;
             var settings = (IDictionary<string, object>)expando;
@@ -437,6 +514,8 @@ namespace SuperMassive {
             } else throw new InvalidOperationException("Can't parse this object to the database - there are no properties set");
             return result;
         }
+
+
         /// <summary>
         /// Creates a command for use with transactions - internal stuff mostly, but here for you to play with
         /// </summary>
@@ -464,6 +543,8 @@ namespace SuperMassive {
             } else throw new InvalidOperationException("No parsable object was sent in - could not divine any name/value pairs");
             return result;
         }
+
+
         /// <summary>
         /// Removes one or more records from the DB according to the passed-in WHERE
         /// </summary>
@@ -477,11 +558,15 @@ namespace SuperMassive {
             }
             return CreateCommand(sql, null, args);
         }
+
+
         public bool IsValid(dynamic item) {
             Errors.Clear();
             Validate(item);
             return Errors.Count == 0;
         }
+
+
         //Temporary holder for error messages
         public IList<string> Errors = new List<string>();
         /// <summary>
@@ -513,6 +598,8 @@ namespace SuperMassive {
                 return null;
             }
         }
+
+
         /// <summary>
         /// Updates a record in the database. You can pass in an Anonymous object, an ExpandoObject,
         /// A regular old POCO, or a NameValueCollection from a Request.Form or Request.QueryString
@@ -529,6 +616,8 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         /// <summary>
         /// Removes one or more records from the DB according to the passed-in WHERE
         /// </summary>
@@ -541,6 +630,8 @@ namespace SuperMassive {
             }
             return result;
         }
+
+
         /// <summary>
         /// Removes one or more records from the DB according to the passed-in WHERE
         /// </summary>
@@ -554,6 +645,7 @@ namespace SuperMassive {
             }
         }
 
+
         //Hooks
         public virtual void Validate(dynamic item) { }
         public virtual void Inserted(dynamic item) { }
@@ -561,6 +653,7 @@ namespace SuperMassive {
         public virtual void Deleted(dynamic item) { }
         public virtual bool BeforeDelete(dynamic item) { return true; }
         public virtual bool BeforeSave(dynamic item) { return true; }
+
 
         //validation methods
         public virtual void ValidatesPresenceOf(object value, string message = "Required") {
@@ -571,6 +664,8 @@ namespace SuperMassive {
                 Errors.Add(message);
             }
         }
+
+
         //fun methods
         public virtual void ValidatesNumericalityOf(object value, string message = "Should be a number") {
             var type = value.GetType().Name;
@@ -579,6 +674,8 @@ namespace SuperMassive {
                 Errors.Add(message);
             }
         }
+
+
         public virtual void ValidateIsCurrency(object value, string message = "Should be money") {
             if (value == null) {
                 Errors.Add(message);
@@ -589,12 +686,18 @@ namespace SuperMassive {
                 Errors.Add(message);
             }
         }
+
+
         public int Count() {
             return Count(TableName);
         }
+
+
         public int Count(string tableName, string where="", params object[] args) {
             return (int)Scalar("SELECT COUNT(*) FROM " + tableName+" "+ where, args);
         }
+
+
         /// <summary>
         /// A helpful query tool
         /// </summary>
